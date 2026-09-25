@@ -804,7 +804,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .app:hover .app__label::before{width:22px}
 
 /* ------------------------------------------------------------
-   11) Contact Form → إرسال إلى البريد الإلكتروني (FormSubmit)
+   11) Contact Form → إرسال إلى البريد الإلكتروني (FormSubmit AJAX)
    ------------------------------------------------------------ */
 (function () {
   var form = document.getElementById('contactForm');
@@ -827,7 +827,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   var formSuccess = document.getElementById('formSuccess');
   var formErrorMsg = document.getElementById('formErrorMsg');
 
-  /* ⚠️ عدّل هذا البريد إن لزم */
+  /* ✅ رابط FormSubmit AJAX الخاص بحسابك */
   var EMAIL_ENDPOINT = 'https://formsubmit.co/el/duvadu';
 
   function setError(field, hasError) {
@@ -934,15 +934,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
       },
       body: JSON.stringify(payload)
     })
-      .then(function (res) { return res.json().catch(function () { return {}; }).then(function (data) { return { ok: res.ok, data: data }; }); })
-      .then(function (result) {
-        if (result.ok) {
-          form.reset();
-          if (formNote) formNote.style.display = 'none';
-          if (formSuccess) formSuccess.style.display = 'block';
-          if (formSuccess) formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        } else {
-          throw new Error('Send failed');
+      .then(function (res) {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      })
+      .then(function (data) {
+        form.reset();
+        if (formNote) formNote.style.display = 'none';
+        if (formSuccess) {
+          formSuccess.style.display = 'block';
+          formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
       })
       .catch(function () {
