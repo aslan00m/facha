@@ -2972,57 +2972,67 @@ a.contact__val:hover{color:var(--gold)}
       <div data-reveal="left">
         <form class="form" id="contactForm" novalidate>
 
-          <div class="form__row">
-            <div class="field" id="f-name">
-              <label for="name">الاسم <span class="req">*</span></label>
-              <input type="text" id="name" name="name" placeholder="الاسم الكامل" autocomplete="name">
-              <span class="field__err">يرجى إدخال الاسم.</span>
-            </div>
+  <div class="form__row">
+    <div class="field" id="f-name">
+      <label for="name">الاسم <span class="req">*</span></label>
+      <input type="text" id="name" name="name" placeholder="الاسم الكامل" autocomplete="name">
+      <span class="field__err">يرجى إدخال الاسم.</span>
+    </div>
 
-            <div class="field" id="f-phone">
-              <label for="phone">رقم الجوال <span class="req">*</span></label>
-              <input type="tel" id="phone" name="phone" placeholder="05XXXXXXXX" autocomplete="tel" dir="ltr" style="text-align:right">
-              <span class="field__err">يرجى إدخال رقم جوال صحيح.</span>
-            </div>
-          </div>
+    <div class="field" id="f-phone">
+      <label for="phone">رقم الجوال <span class="req">*</span></label>
+      <input type="tel" id="phone" name="phone" placeholder="05XXXXXXXX" autocomplete="tel" dir="ltr" style="text-align:right">
+      <span class="field__err">يرجى إدخال رقم جوال صحيح.</span>
+    </div>
+  </div>
 
-          <div class="form__row">
-            <div class="field" id="f-city">
-              <label for="city">المدينة <span class="req">*</span></label>
-              <input type="text" id="city" name="city" placeholder="الرياض">
-              <span class="field__err">يرجى إدخال المدينة.</span>
-            </div>
+  <div class="form__row">
+    <div class="field" id="f-city">
+      <label for="city">المدينة <span class="req">*</span></label>
+      <input type="text" id="city" name="city" placeholder="الرياض">
+      <span class="field__err">يرجى إدخال المدينة.</span>
+    </div>
 
-            <div class="field" id="f-type">
-              <label for="type">نوع المشروع <span class="req">*</span></label>
-              <select id="type" name="type">
-                <option value="">اختر نوع المشروع</option>
-                <option value="واجهات">واجهات</option>
-                <option value="حجر">حجر</option>
-                <option value="رخام">رخام</option>
-                <option value="مغاسل">مغاسل</option>
-                <option value="أخرى">أخرى</option>
-              </select>
-              <span class="field__err">يرجى اختيار نوع المشروع.</span>
-            </div>
-          </div>
+    <div class="field" id="f-type">
+      <label for="type">نوع المشروع <span class="req">*</span></label>
+      <select id="type" name="type">
+        <option value="">اختر نوع المشروع</option>
+        <option value="واجهات">واجهات</option>
+        <option value="حجر">حجر</option>
+        <option value="رخام">رخام</option>
+        <option value="مغاسل">مغاسل</option>
+        <option value="أخرى">أخرى</option>
+      </select>
+      <span class="field__err">يرجى اختيار نوع المشروع.</span>
+    </div>
+  </div>
 
-          <div class="field" id="f-message">
-            <label for="message">الرسالة <span class="req">*</span></label>
-            <textarea id="message" name="message" placeholder="اكتب تفاصيل المشروع، المساحة، أو أي معلومات تساعدنا على فهم احتياجك."></textarea>
-            <span class="field__err">يرجى كتابة تفاصيل المشروع.</span>
-          </div>
+  <div class="field" id="f-message">
+    <label for="message">الرسالة <span class="req">*</span></label>
+    <textarea id="message" name="message" placeholder="اكتب تفاصيل المشروع، المساحة، أو أي معلومات تساعدنا على فهم احتياجك."></textarea>
+    <span class="field__err">يرجى كتابة تفاصيل المشروع.</span>
+  </div>
 
-          <button type="submit" class="btn btn--gold">
-            <i class="fa-brands fa-whatsapp"></i> إرسال الطلب
-          </button>
+  <button type="submit" class="btn btn--gold" id="submitBtn">
+    <i class="fa-regular fa-paper-plane"></i> إرسال الطلب
+  </button>
 
-          <p class="form__note">
-            <i class="fa-solid fa-circle-info"></i>
-            <span>عند الضغط على «إرسال الطلب» سيتم تجهيز رسالة واتساب تحتوي على بياناتك، ثم فتح تطبيق واتساب لإرسالها.</span>
-          </p>
+  <p class="form__note" id="formNote">
+    <i class="fa-solid fa-circle-info"></i>
+    <span>سيتم إرسال بياناتك إلى بريد الشركة، وسنعاود التواصل معك في أقرب وقت.</span>
+  </p>
 
-        </form>
+  <div class="form__success" id="formSuccess" style="display:none;margin-top:18px;padding:16px 20px;background:#eef7ee;border:1px solid #b8ddb8;border-radius:2px;color:#2c6b2c;font-size:14px;line-height:1.9">
+    <i class="fa-solid fa-circle-check" style="color:#2c6b2c"></i>
+    تم إرسال طلبك بنجاح. سنعاود التواصل معك قريبًا.
+  </div>
+
+  <div class="form__error-msg" id="formErrorMsg" style="display:none;margin-top:18px;padding:16px 20px;background:#fdf3f1;border:1px solid #e4b8ae;border-radius:2px;color:#9b3a27;font-size:14px;line-height:1.9">
+    <i class="fa-solid fa-triangle-exclamation" style="color:#9b3a27"></i>
+    تعذّر إرسال الطلب حاليًا. يمكنك التواصل معنا عبر واتساب أو الاتصال المباشر.
+  </div>
+
+</form>
       </div>
 
     </div>
