@@ -38,6 +38,16 @@
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231F2321'/><text x='50' y='68' font-size='52' font-family='Arial' font-weight='bold' fill='%23A88C68' text-anchor='middle'>د</text></svg>">
 
+<!--
+  ============================================================
+  دليل الصور — Image Configuration
+  ------------------------------------------------------------
+  جميع روابط الصور موضوعة مباشرة داخل عناصر <img> في الأقسام.
+  لاستبدال أي صورة، ابحث عن السمة src الخاصة بها واستبدل الرابط.
+  جميع الصور تستخدم loading="lazy" ما عدا صورة الهيرو.
+  ============================================================
+-->
+
 <style>
 /* ============================================================
    1. VARIABLES & RESET
@@ -89,12 +99,14 @@ h1,h2,h3,h4,h5{line-height:1.35;font-weight:700;letter-spacing:-.2px}
 
 ::selection{background:var(--gold);color:#fff}
 
+/* Focus states */
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
   outline:2px solid var(--gold);
   outline-offset:3px;
   border-radius:2px;
 }
 
+/* Scrollbar */
 ::-webkit-scrollbar{width:10px}
 ::-webkit-scrollbar-track{background:var(--sand)}
 ::-webkit-scrollbar-thumb{background:var(--gray);border-radius:10px}
@@ -202,8 +214,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .btn--wa{background:#25D366;color:#fff}
 .btn--wa:hover{background:#1eb85a;transform:translateY(-2px)}
 
-.btn:disabled{cursor:not-allowed}
-
 /* ============================================================
    4. HEADER
    ============================================================ */
@@ -229,6 +239,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   gap:24px;
 }
 
+/* Logo */
 .logo{display:flex;align-items:center;gap:13px;flex-shrink:0}
 .logo__mark{
   width:42px;height:42px;
@@ -252,6 +263,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .header.scrolled .logo__ar{color:var(--dark)}
 .header.scrolled .logo__sub{color:var(--gray)}
 
+/* Nav */
 .nav{display:flex;align-items:center;gap:26px}
 .nav a{
   font-size:13.5px;
@@ -279,6 +291,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 .header__cta{padding:12px 24px;font-size:13px;flex-shrink:0}
 
+/* Burger */
 .burger{
   display:none;
   width:46px;height:46px;
@@ -305,6 +318,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .burger.open{border-color:rgba(255,255,255,.35)}
 .burger.open span{background:#fff !important}
 
+/* Mobile Menu */
 .mobile-menu{
   position:fixed;
   inset:0;
@@ -474,6 +488,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   to{opacity:1;transform:translateY(0)}
 }
 
+/* Scroll indicator */
 .scroll-ind{
   position:absolute;
   bottom:36px;
@@ -684,7 +699,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .svc__link:hover i{transform:translateX(-5px)}
 
 /* ============================================================
-   9. STONE
+   9. STONE (70/30)
    ============================================================ */
 .stone__grid{
   display:grid;
@@ -1451,27 +1466,6 @@ a.contact__val:hover{color:var(--gold)}
 }
 .form__note i{color:var(--gold);margin-top:4px;font-size:12px}
 .form .btn{width:100%;margin-top:10px;padding:17px}
-
-.form__feedback{
-  display:none;
-  margin-top:18px;
-  padding:16px 20px;
-  border-radius:2px;
-  font-size:14px;
-  line-height:1.9;
-}
-.form__feedback--success{
-  background:#eef7ee;
-  border:1px solid #b8ddb8;
-  color:#2c6b2c;
-}
-.form__feedback--success i{color:#2c6b2c}
-.form__feedback--error{
-  background:#fdf3f1;
-  border:1px solid #e4b8ae;
-  color:#9b3a27;
-}
-.form__feedback--error i{color:#9b3a27}
 
 /* ============================================================
    23. LOCATION
@@ -2911,24 +2905,14 @@ a.contact__val:hover{color:var(--gold)}
             <span class="field__err">يرجى كتابة تفاصيل المشروع.</span>
           </div>
 
-          <button type="submit" class="btn btn--gold" id="submitBtn">
-            <i class="fa-regular fa-paper-plane"></i> إرسال الطلب
+          <button type="submit" class="btn btn--gold">
+            <i class="fa-brands fa-whatsapp"></i> إرسال الطلب
           </button>
 
-          <p class="form__note" id="formNote">
+          <p class="form__note">
             <i class="fa-solid fa-circle-info"></i>
-            <span>سيتم إرسال بياناتك إلى بريد الشركة، وسنعاود التواصل معك في أقرب وقت.</span>
+            <span>عند الضغط على «إرسال الطلب» سيتم تجهيز رسالة واتساب تحتوي على بياناتك، ثم فتح تطبيق واتساب لإرسالها.</span>
           </p>
-
-          <div class="form__feedback form__feedback--success" id="formSuccess">
-            <i class="fa-solid fa-circle-check"></i>
-            تم إرسال طلبك بنجاح. سنعاود التواصل معك قريبًا.
-          </div>
-
-          <div class="form__feedback form__feedback--error" id="formErrorMsg">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            تعذّر إرسال الطلب حاليًا. يمكنك التواصل معنا عبر واتساب أو الاتصال المباشر.
-          </div>
 
         </form>
       </div>
@@ -3118,6 +3102,9 @@ a.contact__val:hover{color:var(--gold)}
 (function () {
   'use strict';
 
+  /* ------------------------------------------------------------
+     الإعدادات العامة
+     ------------------------------------------------------------ */
   var WHATSAPP_BASE = 'https://wa.me/966536089153';
   var WA_DEFAULT_MSG = 'مرحبًا، أرغب في الاستفسار عن خدمات الحجر والواجهات والرخام والمغاسل.';
 
@@ -3195,6 +3182,7 @@ a.contact__val:hover{color:var(--gold)}
       }
     }
 
+    /* إذا وصلنا لآخر الصفحة، فعّل قسم التواصل */
     if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 4) {
       currentId = 'contact';
     }
@@ -3211,7 +3199,7 @@ a.contact__val:hover{color:var(--gold)}
   }
 
   /* ------------------------------------------------------------
-     4) Scroll handler
+     4) Scroll handler (throttled via requestAnimationFrame)
      ------------------------------------------------------------ */
   var ticking = false;
 
@@ -3247,7 +3235,7 @@ a.contact__val:hover{color:var(--gold)}
   }
 
   /* ------------------------------------------------------------
-     6) Smooth Scroll
+     6) Smooth Scroll for all in-page anchors
      ------------------------------------------------------------ */
   var allAnchors = document.querySelectorAll('a[href^="#"]');
 
@@ -3276,7 +3264,7 @@ a.contact__val:hover{color:var(--gold)}
   });
 
   /* ------------------------------------------------------------
-     7) Scroll Reveal
+     7) Scroll Reveal — IntersectionObserver
      ------------------------------------------------------------ */
   var revealEls = document.querySelectorAll('[data-reveal]');
 
@@ -3294,6 +3282,7 @@ a.contact__val:hover{color:var(--gold)}
     });
 
     Array.prototype.forEach.call(revealEls, function (el, index) {
+      /* تأخير بسيط متسلسل للعناصر داخل نفس المجموعة */
       el.style.transitionDelay = (index % 5) * 70 + 'ms';
       revealObserver.observe(el);
     });
@@ -3436,6 +3425,7 @@ a.contact__val:hover{color:var(--gold)}
     }
   });
 
+  /* Touch swipe inside lightbox */
   (function () {
     var touchStartX = 0;
     var touchEndX = 0;
@@ -3520,6 +3510,7 @@ a.contact__val:hover{color:var(--gold)}
       if (dragging) stopDrag(e);
     });
 
+    /* Keyboard support */
     wrap.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
@@ -3540,7 +3531,7 @@ a.contact__val:hover{color:var(--gold)}
   })();
 
   /* ------------------------------------------------------------
-     11) Contact Form → إرسال إلى البريد الإلكتروني (FormSubmit)
+     11) Contact Form → WhatsApp
      ------------------------------------------------------------ */
   (function () {
     var form = document.getElementById('contactForm');
@@ -3558,14 +3549,6 @@ a.contact__val:hover{color:var(--gold)}
     var inputType = document.getElementById('type');
     var inputMessage = document.getElementById('message');
 
-    var submitBtn = document.getElementById('submitBtn');
-    var formNote = document.getElementById('formNote');
-    var formSuccess = document.getElementById('formSuccess');
-    var formErrorMsg = document.getElementById('formErrorMsg');
-
-    /* ✅ رابط FormSubmit الخاص بالبريد المُفعّل */
-    var EMAIL_ENDPOINT = 'https://formsubmit.co/el/duvadu';
-
     function setError(field, hasError) {
       if (!field) return;
       field.classList.toggle('error', hasError);
@@ -3582,22 +3565,22 @@ a.contact__val:hover{color:var(--gold)}
       return /^(\+?966|0)?5\d{8}$/.test(cleaned) || /^\+?\d{8,15}$/.test(cleaned);
     }
 
+    /* إزالة الخطأ عند الكتابة */
     [inputName, inputPhone, inputCity, inputType, inputMessage].forEach(function (input) {
       if (!input) return;
-      var handler = function () {
+      input.addEventListener('input', function () {
         var field = input.closest('.field');
         if (field) field.classList.remove('error');
-      };
-      input.addEventListener('input', handler);
-      input.addEventListener('change', handler);
+      });
+      input.addEventListener('change', function () {
+        var field = input.closest('.field');
+        if (field) field.classList.remove('error');
+      });
     });
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       clearErrors();
-
-      if (formSuccess) formSuccess.style.display = 'none';
-      if (formErrorMsg) formErrorMsg.style.display = 'none';
 
       var name = inputName.value.trim();
       var phone = inputPhone.value.trim();
@@ -3643,59 +3626,22 @@ a.contact__val:hover{color:var(--gold)}
         return;
       }
 
-      var originalBtnHTML = submitBtn.innerHTML;
-      submitBtn.disabled = true;
-      submitBtn.style.opacity = '0.7';
-      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جارٍ الإرسال...';
+      var waText =
+        'مرحبًا شركة ديارنا الحديثة،\n\n' +
+        'لدي استفسار عن مشروع.\n\n' +
+        'الاسم: ' + name + '\n' +
+        'الجوال: ' + phone + '\n' +
+        'المدينة: ' + city + '\n' +
+        'نوع المشروع: ' + type + '\n' +
+        'التفاصيل: ' + message;
 
-      var payload = {
-        _subject: 'طلب عرض سعر جديد - ' + type + ' - ' + name,
-        _template: 'table',
-        _captcha: 'false',
-        'الاسم': name,
-        'رقم الجوال': phone,
-        'المدينة': city,
-        'نوع المشروع': type,
-        'التفاصيل': message,
-        'المصدر': 'نموذج الموقع الإلكتروني'
-      };
-
-      fetch(EMAIL_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      })
-        .then(function (res) {
-          if (!res.ok) throw new Error('Network response was not ok');
-          return res.json().catch(function () { return {}; });
-        })
-        .then(function () {
-          form.reset();
-          if (formNote) formNote.style.display = 'none';
-          if (formSuccess) {
-            formSuccess.style.display = 'block';
-            formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
-        })
-        .catch(function () {
-          if (formErrorMsg) {
-            formErrorMsg.style.display = 'block';
-            formErrorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          }
-        })
-        .finally(function () {
-          submitBtn.disabled = false;
-          submitBtn.style.opacity = '';
-          submitBtn.innerHTML = originalBtnHTML;
-        });
+      var url = WHATSAPP_BASE + '?text=' + encodeURIComponent(waText);
+      window.open(url, '_blank', 'noopener');
     });
   })();
 
   /* ------------------------------------------------------------
-     12) Prefill default WhatsApp links
+     12) Prefill default WhatsApp links (احتياطي)
      ------------------------------------------------------------ */
   (function () {
     var links = document.querySelectorAll('a[href="https://wa.me/966536089153"]');
