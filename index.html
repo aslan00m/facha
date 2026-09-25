@@ -38,16 +38,6 @@
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231F2321'/><text x='50' y='68' font-size='52' font-family='Arial' font-weight='bold' fill='%23A88C68' text-anchor='middle'>د</text></svg>">
 
-<!--
-  ============================================================
-  دليل الصور — Image Configuration
-  ------------------------------------------------------------
-  جميع روابط الصور موضوعة مباشرة داخل عناصر <img> في الأقسام.
-  لاستبدال أي صورة، ابحث عن السمة src الخاصة بها واستبدل الرابط.
-  جميع الصور تستخدم loading="lazy" ما عدا صورة الهيرو.
-  ============================================================
--->
-
 <style>
 /* ============================================================
    1. VARIABLES & RESET
@@ -99,14 +89,12 @@ h1,h2,h3,h4,h5{line-height:1.35;font-weight:700;letter-spacing:-.2px}
 
 ::selection{background:var(--gold);color:#fff}
 
-/* Focus states */
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
   outline:2px solid var(--gold);
   outline-offset:3px;
   border-radius:2px;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar{width:10px}
 ::-webkit-scrollbar-track{background:var(--sand)}
 ::-webkit-scrollbar-thumb{background:var(--gray);border-radius:10px}
@@ -214,6 +202,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .btn--wa{background:#25D366;color:#fff}
 .btn--wa:hover{background:#1eb85a;transform:translateY(-2px)}
 
+.btn:disabled{cursor:not-allowed}
+
 /* ============================================================
    4. HEADER
    ============================================================ */
@@ -239,7 +229,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   gap:24px;
 }
 
-/* Logo */
 .logo{display:flex;align-items:center;gap:13px;flex-shrink:0}
 .logo__mark{
   width:42px;height:42px;
@@ -263,7 +252,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .header.scrolled .logo__ar{color:var(--dark)}
 .header.scrolled .logo__sub{color:var(--gray)}
 
-/* Nav */
 .nav{display:flex;align-items:center;gap:26px}
 .nav a{
   font-size:13.5px;
@@ -291,7 +279,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 
 .header__cta{padding:12px 24px;font-size:13px;flex-shrink:0}
 
-/* Burger */
 .burger{
   display:none;
   width:46px;height:46px;
@@ -318,7 +305,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .burger.open{border-color:rgba(255,255,255,.35)}
 .burger.open span{background:#fff !important}
 
-/* Mobile Menu */
 .mobile-menu{
   position:fixed;
   inset:0;
@@ -488,7 +474,6 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
   to{opacity:1;transform:translateY(0)}
 }
 
-/* Scroll indicator */
 .scroll-ind{
   position:absolute;
   bottom:36px;
@@ -699,7 +684,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .svc__link:hover i{transform:translateX(-5px)}
 
 /* ============================================================
-   9. STONE (70/30)
+   9. STONE
    ============================================================ */
 .stone__grid{
   display:grid;
@@ -803,162 +788,53 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 }
 .app:hover .app__label::before{width:22px}
 
-/* ------------------------------------------------------------
-   11) Contact Form → إرسال إلى البريد الإلكتروني (FormSubmit AJAX)
-   ------------------------------------------------------------ */
-(function () {
-  var form = document.getElementById('contactForm');
-  if (!form) return;
-
-  var fName = document.getElementById('f-name');
-  var fPhone = document.getElementById('f-phone');
-  var fCity = document.getElementById('f-city');
-  var fType = document.getElementById('f-type');
-  var fMessage = document.getElementById('f-message');
-
-  var inputName = document.getElementById('name');
-  var inputPhone = document.getElementById('phone');
-  var inputCity = document.getElementById('city');
-  var inputType = document.getElementById('type');
-  var inputMessage = document.getElementById('message');
-
-  var submitBtn = document.getElementById('submitBtn');
-  var formNote = document.getElementById('formNote');
-  var formSuccess = document.getElementById('formSuccess');
-  var formErrorMsg = document.getElementById('formErrorMsg');
-
-  /* ✅ رابط FormSubmit AJAX الخاص بحسابك */
-  var EMAIL_ENDPOINT = 'https://formsubmit.co/el/duvadu';
-
-  function setError(field, hasError) {
-    if (!field) return;
-    field.classList.toggle('error', hasError);
-  }
-
-  function clearErrors() {
-    [fName, fPhone, fCity, fType, fMessage].forEach(function (f) {
-      setError(f, false);
-    });
-  }
-
-  function isValidPhone(value) {
-    var cleaned = value.replace(/[\s\-()]/g, '');
-    return /^(\+?966|0)?5\d{8}$/.test(cleaned) || /^\+?\d{8,15}$/.test(cleaned);
-  }
-
-  /* إزالة الخطأ عند الكتابة */
-  [inputName, inputPhone, inputCity, inputType, inputMessage].forEach(function (input) {
-    if (!input) return;
-    var handler = function () {
-      var field = input.closest('.field');
-      if (field) field.classList.remove('error');
-    };
-    input.addEventListener('input', handler);
-    input.addEventListener('change', handler);
-  });
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    clearErrors();
-
-    if (formSuccess) formSuccess.style.display = 'none';
-    if (formErrorMsg) formErrorMsg.style.display = 'none';
-
-    var name = inputName.value.trim();
-    var phone = inputPhone.value.trim();
-    var city = inputCity.value.trim();
-    var type = inputType.value.trim();
-    var message = inputMessage.value.trim();
-
-    var hasError = false;
-    var firstError = null;
-
-    if (name.length < 2) {
-      setError(fName, true);
-      hasError = true;
-      if (!firstError) firstError = inputName;
-    }
-
-    if (!isValidPhone(phone)) {
-      setError(fPhone, true);
-      hasError = true;
-      if (!firstError) firstError = inputPhone;
-    }
-
-    if (city.length < 2) {
-      setError(fCity, true);
-      hasError = true;
-      if (!firstError) firstError = inputCity;
-    }
-
-    if (!type) {
-      setError(fType, true);
-      hasError = true;
-      if (!firstError) firstError = inputType;
-    }
-
-    if (message.length < 5) {
-      setError(fMessage, true);
-      hasError = true;
-      if (!firstError) firstError = inputMessage;
-    }
-
-    if (hasError) {
-      if (firstError) firstError.focus();
-      return;
-    }
-
-    /* حالة الإرسال */
-    var originalBtnHTML = submitBtn.innerHTML;
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = '0.7';
-    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جارٍ الإرسال...';
-
-    var payload = {
-      _subject: 'طلب عرض سعر جديد - ' + type + ' - ' + name,
-      _template: 'table',
-      _captcha: 'false',
-      'الاسم': name,
-      'رقم الجوال': phone,
-      'المدينة': city,
-      'نوع المشروع': type,
-      'التفاصيل': message,
-      'المصدر': 'نموذج الموقع الإلكتروني'
-    };
-
-    fetch(EMAIL_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    })
-      .then(function (res) {
-        if (!res.ok) throw new Error('Network response was not ok');
-        return res.json();
-      })
-      .then(function (data) {
-        form.reset();
-        if (formNote) formNote.style.display = 'none';
-        if (formSuccess) {
-          formSuccess.style.display = 'block';
-          formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-      })
-      .catch(function () {
-        if (formErrorMsg) {
-          formErrorMsg.style.display = 'block';
-          formErrorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
-      })
-      .finally(function () {
-        submitBtn.disabled = false;
-        submitBtn.style.opacity = '';
-        submitBtn.innerHTML = originalBtnHTML;
-      });
-  });
-})();
+/* ============================================================
+   11. FACADES
+   ============================================================ */
+.facades{
+  position:relative;
+  min-height:82vh;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  background:var(--dark);
+}
+.facades__bg{position:absolute;inset:0}
+.facades__bg img{width:100%;height:100%;object-fit:cover}
+.facades__overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to right, rgba(18,21,19,.35), rgba(18,21,19,.88));
+}
+.facades__content{position:relative;z-index:3;padding:110px 0;width:100%}
+.facades__inner{max-width:660px;margin-inline-start:auto}
+.facades__title{
+  font-size:clamp(1.7rem,3.6vw,3rem);
+  color:#fff;font-weight:700;line-height:1.35;letter-spacing:-.8px;
+}
+.facades__desc{
+  color:rgba(255,255,255,.68);
+  font-size:1rem;line-height:2.1;margin-top:22px;max-width:560px;
+}
+.facades__points{
+  display:flex;flex-wrap:wrap;gap:0;margin-top:44px;
+  border-top:1px solid rgba(255,255,255,.14);
+  border-bottom:1px solid rgba(255,255,255,.14);
+}
+.facades__points li{
+  flex:1 1 150px;
+  padding:24px 0;
+  color:#fff;
+  font-size:.95rem;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-left:1px solid rgba(255,255,255,.14);
+  padding-inline-start:22px;
+}
+.facades__points li:first-child{border-left:none;padding-inline-start:0}
+.facades__points li i{color:var(--gold);font-size:13px}
+.facades__actions{margin-top:44px;display:flex;gap:14px;flex-wrap:wrap}
 
 /* ============================================================
    12. MARBLE
@@ -1575,6 +1451,27 @@ a.contact__val:hover{color:var(--gold)}
 }
 .form__note i{color:var(--gold);margin-top:4px;font-size:12px}
 .form .btn{width:100%;margin-top:10px;padding:17px}
+
+.form__feedback{
+  display:none;
+  margin-top:18px;
+  padding:16px 20px;
+  border-radius:2px;
+  font-size:14px;
+  line-height:1.9;
+}
+.form__feedback--success{
+  background:#eef7ee;
+  border:1px solid #b8ddb8;
+  color:#2c6b2c;
+}
+.form__feedback--success i{color:#2c6b2c}
+.form__feedback--error{
+  background:#fdf3f1;
+  border:1px solid #e4b8ae;
+  color:#9b3a27;
+}
+.form__feedback--error i{color:#9b3a27}
 
 /* ============================================================
    23. LOCATION
@@ -2973,67 +2870,67 @@ a.contact__val:hover{color:var(--gold)}
       <div data-reveal="left">
         <form class="form" id="contactForm" novalidate>
 
-  <div class="form__row">
-    <div class="field" id="f-name">
-      <label for="name">الاسم <span class="req">*</span></label>
-      <input type="text" id="name" name="name" placeholder="الاسم الكامل" autocomplete="name">
-      <span class="field__err">يرجى إدخال الاسم.</span>
-    </div>
+          <div class="form__row">
+            <div class="field" id="f-name">
+              <label for="name">الاسم <span class="req">*</span></label>
+              <input type="text" id="name" name="name" placeholder="الاسم الكامل" autocomplete="name">
+              <span class="field__err">يرجى إدخال الاسم.</span>
+            </div>
 
-    <div class="field" id="f-phone">
-      <label for="phone">رقم الجوال <span class="req">*</span></label>
-      <input type="tel" id="phone" name="phone" placeholder="05XXXXXXXX" autocomplete="tel" dir="ltr" style="text-align:right">
-      <span class="field__err">يرجى إدخال رقم جوال صحيح.</span>
-    </div>
-  </div>
+            <div class="field" id="f-phone">
+              <label for="phone">رقم الجوال <span class="req">*</span></label>
+              <input type="tel" id="phone" name="phone" placeholder="05XXXXXXXX" autocomplete="tel" dir="ltr" style="text-align:right">
+              <span class="field__err">يرجى إدخال رقم جوال صحيح.</span>
+            </div>
+          </div>
 
-  <div class="form__row">
-    <div class="field" id="f-city">
-      <label for="city">المدينة <span class="req">*</span></label>
-      <input type="text" id="city" name="city" placeholder="الرياض">
-      <span class="field__err">يرجى إدخال المدينة.</span>
-    </div>
+          <div class="form__row">
+            <div class="field" id="f-city">
+              <label for="city">المدينة <span class="req">*</span></label>
+              <input type="text" id="city" name="city" placeholder="الرياض">
+              <span class="field__err">يرجى إدخال المدينة.</span>
+            </div>
 
-    <div class="field" id="f-type">
-      <label for="type">نوع المشروع <span class="req">*</span></label>
-      <select id="type" name="type">
-        <option value="">اختر نوع المشروع</option>
-        <option value="واجهات">واجهات</option>
-        <option value="حجر">حجر</option>
-        <option value="رخام">رخام</option>
-        <option value="مغاسل">مغاسل</option>
-        <option value="أخرى">أخرى</option>
-      </select>
-      <span class="field__err">يرجى اختيار نوع المشروع.</span>
-    </div>
-  </div>
+            <div class="field" id="f-type">
+              <label for="type">نوع المشروع <span class="req">*</span></label>
+              <select id="type" name="type">
+                <option value="">اختر نوع المشروع</option>
+                <option value="واجهات">واجهات</option>
+                <option value="حجر">حجر</option>
+                <option value="رخام">رخام</option>
+                <option value="مغاسل">مغاسل</option>
+                <option value="أخرى">أخرى</option>
+              </select>
+              <span class="field__err">يرجى اختيار نوع المشروع.</span>
+            </div>
+          </div>
 
-  <div class="field" id="f-message">
-    <label for="message">الرسالة <span class="req">*</span></label>
-    <textarea id="message" name="message" placeholder="اكتب تفاصيل المشروع، المساحة، أو أي معلومات تساعدنا على فهم احتياجك."></textarea>
-    <span class="field__err">يرجى كتابة تفاصيل المشروع.</span>
-  </div>
+          <div class="field" id="f-message">
+            <label for="message">الرسالة <span class="req">*</span></label>
+            <textarea id="message" name="message" placeholder="اكتب تفاصيل المشروع، المساحة، أو أي معلومات تساعدنا على فهم احتياجك."></textarea>
+            <span class="field__err">يرجى كتابة تفاصيل المشروع.</span>
+          </div>
 
-  <button type="submit" class="btn btn--gold" id="submitBtn">
-    <i class="fa-regular fa-paper-plane"></i> إرسال الطلب
-  </button>
+          <button type="submit" class="btn btn--gold" id="submitBtn">
+            <i class="fa-regular fa-paper-plane"></i> إرسال الطلب
+          </button>
 
-  <p class="form__note" id="formNote">
-    <i class="fa-solid fa-circle-info"></i>
-    <span>سيتم إرسال بياناتك إلى بريد الشركة، وسنعاود التواصل معك في أقرب وقت.</span>
-  </p>
+          <p class="form__note" id="formNote">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>سيتم إرسال بياناتك إلى بريد الشركة، وسنعاود التواصل معك في أقرب وقت.</span>
+          </p>
 
-  <div class="form__success" id="formSuccess" style="display:none;margin-top:18px;padding:16px 20px;background:#eef7ee;border:1px solid #b8ddb8;border-radius:2px;color:#2c6b2c;font-size:14px;line-height:1.9">
-    <i class="fa-solid fa-circle-check" style="color:#2c6b2c"></i>
-    تم إرسال طلبك بنجاح. سنعاود التواصل معك قريبًا.
-  </div>
+          <div class="form__feedback form__feedback--success" id="formSuccess">
+            <i class="fa-solid fa-circle-check"></i>
+            تم إرسال طلبك بنجاح. سنعاود التواصل معك قريبًا.
+          </div>
 
-  <div class="form__error-msg" id="formErrorMsg" style="display:none;margin-top:18px;padding:16px 20px;background:#fdf3f1;border:1px solid #e4b8ae;border-radius:2px;color:#9b3a27;font-size:14px;line-height:1.9">
-    <i class="fa-solid fa-triangle-exclamation" style="color:#9b3a27"></i>
-    تعذّر إرسال الطلب حاليًا. يمكنك التواصل معنا عبر واتساب أو الاتصال المباشر.
-  </div>
+          <div class="form__feedback form__feedback--error" id="formErrorMsg">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            تعذّر إرسال الطلب حاليًا. يمكنك التواصل معنا عبر واتساب أو الاتصال المباشر.
+          </div>
 
-</form>
+        </form>
       </div>
 
     </div>
@@ -3221,9 +3118,6 @@ a.contact__val:hover{color:var(--gold)}
 (function () {
   'use strict';
 
-  /* ------------------------------------------------------------
-     الإعدادات العامة
-     ------------------------------------------------------------ */
   var WHATSAPP_BASE = 'https://wa.me/966536089153';
   var WA_DEFAULT_MSG = 'مرحبًا، أرغب في الاستفسار عن خدمات الحجر والواجهات والرخام والمغاسل.';
 
@@ -3301,7 +3195,6 @@ a.contact__val:hover{color:var(--gold)}
       }
     }
 
-    /* إذا وصلنا لآخر الصفحة، فعّل قسم التواصل */
     if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 4) {
       currentId = 'contact';
     }
@@ -3318,7 +3211,7 @@ a.contact__val:hover{color:var(--gold)}
   }
 
   /* ------------------------------------------------------------
-     4) Scroll handler (throttled via requestAnimationFrame)
+     4) Scroll handler
      ------------------------------------------------------------ */
   var ticking = false;
 
@@ -3354,7 +3247,7 @@ a.contact__val:hover{color:var(--gold)}
   }
 
   /* ------------------------------------------------------------
-     6) Smooth Scroll for all in-page anchors
+     6) Smooth Scroll
      ------------------------------------------------------------ */
   var allAnchors = document.querySelectorAll('a[href^="#"]');
 
@@ -3383,7 +3276,7 @@ a.contact__val:hover{color:var(--gold)}
   });
 
   /* ------------------------------------------------------------
-     7) Scroll Reveal — IntersectionObserver
+     7) Scroll Reveal
      ------------------------------------------------------------ */
   var revealEls = document.querySelectorAll('[data-reveal]');
 
@@ -3401,7 +3294,6 @@ a.contact__val:hover{color:var(--gold)}
     });
 
     Array.prototype.forEach.call(revealEls, function (el, index) {
-      /* تأخير بسيط متسلسل للعناصر داخل نفس المجموعة */
       el.style.transitionDelay = (index % 5) * 70 + 'ms';
       revealObserver.observe(el);
     });
@@ -3544,7 +3436,6 @@ a.contact__val:hover{color:var(--gold)}
     }
   });
 
-  /* Touch swipe inside lightbox */
   (function () {
     var touchStartX = 0;
     var touchEndX = 0;
@@ -3629,7 +3520,6 @@ a.contact__val:hover{color:var(--gold)}
       if (dragging) stopDrag(e);
     });
 
-    /* Keyboard support */
     wrap.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowLeft') {
         e.preventDefault();
@@ -3650,7 +3540,7 @@ a.contact__val:hover{color:var(--gold)}
   })();
 
   /* ------------------------------------------------------------
-     11) Contact Form → WhatsApp
+     11) Contact Form → إرسال إلى البريد الإلكتروني (FormSubmit)
      ------------------------------------------------------------ */
   (function () {
     var form = document.getElementById('contactForm');
@@ -3668,6 +3558,14 @@ a.contact__val:hover{color:var(--gold)}
     var inputType = document.getElementById('type');
     var inputMessage = document.getElementById('message');
 
+    var submitBtn = document.getElementById('submitBtn');
+    var formNote = document.getElementById('formNote');
+    var formSuccess = document.getElementById('formSuccess');
+    var formErrorMsg = document.getElementById('formErrorMsg');
+
+    /* ✅ رابط FormSubmit الخاص بالبريد المُفعّل */
+    var EMAIL_ENDPOINT = 'https://formsubmit.co/el/duvadu';
+
     function setError(field, hasError) {
       if (!field) return;
       field.classList.toggle('error', hasError);
@@ -3684,22 +3582,22 @@ a.contact__val:hover{color:var(--gold)}
       return /^(\+?966|0)?5\d{8}$/.test(cleaned) || /^\+?\d{8,15}$/.test(cleaned);
     }
 
-    /* إزالة الخطأ عند الكتابة */
     [inputName, inputPhone, inputCity, inputType, inputMessage].forEach(function (input) {
       if (!input) return;
-      input.addEventListener('input', function () {
+      var handler = function () {
         var field = input.closest('.field');
         if (field) field.classList.remove('error');
-      });
-      input.addEventListener('change', function () {
-        var field = input.closest('.field');
-        if (field) field.classList.remove('error');
-      });
+      };
+      input.addEventListener('input', handler);
+      input.addEventListener('change', handler);
     });
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       clearErrors();
+
+      if (formSuccess) formSuccess.style.display = 'none';
+      if (formErrorMsg) formErrorMsg.style.display = 'none';
 
       var name = inputName.value.trim();
       var phone = inputPhone.value.trim();
@@ -3745,22 +3643,59 @@ a.contact__val:hover{color:var(--gold)}
         return;
       }
 
-      var waText =
-        'مرحبًا شركة ديارنا الحديثة،\n\n' +
-        'لدي استفسار عن مشروع.\n\n' +
-        'الاسم: ' + name + '\n' +
-        'الجوال: ' + phone + '\n' +
-        'المدينة: ' + city + '\n' +
-        'نوع المشروع: ' + type + '\n' +
-        'التفاصيل: ' + message;
+      var originalBtnHTML = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.7';
+      submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جارٍ الإرسال...';
 
-      var url = WHATSAPP_BASE + '?text=' + encodeURIComponent(waText);
-      window.open(url, '_blank', 'noopener');
+      var payload = {
+        _subject: 'طلب عرض سعر جديد - ' + type + ' - ' + name,
+        _template: 'table',
+        _captcha: 'false',
+        'الاسم': name,
+        'رقم الجوال': phone,
+        'المدينة': city,
+        'نوع المشروع': type,
+        'التفاصيل': message,
+        'المصدر': 'نموذج الموقع الإلكتروني'
+      };
+
+      fetch(EMAIL_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error('Network response was not ok');
+          return res.json().catch(function () { return {}; });
+        })
+        .then(function () {
+          form.reset();
+          if (formNote) formNote.style.display = 'none';
+          if (formSuccess) {
+            formSuccess.style.display = 'block';
+            formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        })
+        .catch(function () {
+          if (formErrorMsg) {
+            formErrorMsg.style.display = 'block';
+            formErrorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        })
+        .finally(function () {
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '';
+          submitBtn.innerHTML = originalBtnHTML;
+        });
     });
   })();
 
   /* ------------------------------------------------------------
-     12) Prefill default WhatsApp links (احتياطي)
+     12) Prefill default WhatsApp links
      ------------------------------------------------------------ */
   (function () {
     var links = document.querySelectorAll('a[href="https://wa.me/966536089153"]');
