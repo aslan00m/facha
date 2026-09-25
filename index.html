@@ -803,53 +803,161 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 }
 .app:hover .app__label::before{width:22px}
 
-/* ============================================================
-   11. FACADES
-   ============================================================ */
-.facades{
-  position:relative;
-  min-height:82vh;
-  display:flex;
-  align-items:center;
-  overflow:hidden;
-  background:var(--dark);
-}
-.facades__bg{position:absolute;inset:0}
-.facades__bg img{width:100%;height:100%;object-fit:cover}
-.facades__overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to right, rgba(18,21,19,.35), rgba(18,21,19,.88));
-}
-.facades__content{position:relative;z-index:3;padding:110px 0;width:100%}
-.facades__inner{max-width:660px;margin-inline-start:auto}
-.facades__title{
-  font-size:clamp(1.7rem,3.6vw,3rem);
-  color:#fff;font-weight:700;line-height:1.35;letter-spacing:-.8px;
-}
-.facades__desc{
-  color:rgba(255,255,255,.68);
-  font-size:1rem;line-height:2.1;margin-top:22px;max-width:560px;
-}
-.facades__points{
-  display:flex;flex-wrap:wrap;gap:0;margin-top:44px;
-  border-top:1px solid rgba(255,255,255,.14);
-  border-bottom:1px solid rgba(255,255,255,.14);
-}
-.facades__points li{
-  flex:1 1 150px;
-  padding:24px 0;
-  color:#fff;
-  font-size:.95rem;
-  font-weight:600;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  border-left:1px solid rgba(255,255,255,.14);
-  padding-inline-start:22px;
-}
-.facades__points li:first-child{border-left:none;padding-inline-start:0}
-.facades__points li i{color:var(--gold);font-size:13px}
-.facades__actions{margin-top:44px;display:flex;gap:14px;flex-wrap:wrap}
+/* ------------------------------------------------------------
+   11) Contact Form → إرسال إلى البريد الإلكتروني (FormSubmit)
+   ------------------------------------------------------------ */
+(function () {
+  var form = document.getElementById('contactForm');
+  if (!form) return;
+
+  var fName = document.getElementById('f-name');
+  var fPhone = document.getElementById('f-phone');
+  var fCity = document.getElementById('f-city');
+  var fType = document.getElementById('f-type');
+  var fMessage = document.getElementById('f-message');
+
+  var inputName = document.getElementById('name');
+  var inputPhone = document.getElementById('phone');
+  var inputCity = document.getElementById('city');
+  var inputType = document.getElementById('type');
+  var inputMessage = document.getElementById('message');
+
+  var submitBtn = document.getElementById('submitBtn');
+  var formNote = document.getElementById('formNote');
+  var formSuccess = document.getElementById('formSuccess');
+  var formErrorMsg = document.getElementById('formErrorMsg');
+
+  /* ⚠️ عدّل هذا البريد إن لزم */
+  var EMAIL_ENDPOINT = 'https://formsubmit.co/el/duvadu';
+
+  function setError(field, hasError) {
+    if (!field) return;
+    field.classList.toggle('error', hasError);
+  }
+
+  function clearErrors() {
+    [fName, fPhone, fCity, fType, fMessage].forEach(function (f) {
+      setError(f, false);
+    });
+  }
+
+  function isValidPhone(value) {
+    var cleaned = value.replace(/[\s\-()]/g, '');
+    return /^(\+?966|0)?5\d{8}$/.test(cleaned) || /^\+?\d{8,15}$/.test(cleaned);
+  }
+
+  /* إزالة الخطأ عند الكتابة */
+  [inputName, inputPhone, inputCity, inputType, inputMessage].forEach(function (input) {
+    if (!input) return;
+    var handler = function () {
+      var field = input.closest('.field');
+      if (field) field.classList.remove('error');
+    };
+    input.addEventListener('input', handler);
+    input.addEventListener('change', handler);
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    clearErrors();
+
+    if (formSuccess) formSuccess.style.display = 'none';
+    if (formErrorMsg) formErrorMsg.style.display = 'none';
+
+    var name = inputName.value.trim();
+    var phone = inputPhone.value.trim();
+    var city = inputCity.value.trim();
+    var type = inputType.value.trim();
+    var message = inputMessage.value.trim();
+
+    var hasError = false;
+    var firstError = null;
+
+    if (name.length < 2) {
+      setError(fName, true);
+      hasError = true;
+      if (!firstError) firstError = inputName;
+    }
+
+    if (!isValidPhone(phone)) {
+      setError(fPhone, true);
+      hasError = true;
+      if (!firstError) firstError = inputPhone;
+    }
+
+    if (city.length < 2) {
+      setError(fCity, true);
+      hasError = true;
+      if (!firstError) firstError = inputCity;
+    }
+
+    if (!type) {
+      setError(fType, true);
+      hasError = true;
+      if (!firstError) firstError = inputType;
+    }
+
+    if (message.length < 5) {
+      setError(fMessage, true);
+      hasError = true;
+      if (!firstError) firstError = inputMessage;
+    }
+
+    if (hasError) {
+      if (firstError) firstError.focus();
+      return;
+    }
+
+    /* حالة الإرسال */
+    var originalBtnHTML = submitBtn.innerHTML;
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.7';
+    submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جارٍ الإرسال...';
+
+    var payload = {
+      _subject: 'طلب عرض سعر جديد - ' + type + ' - ' + name,
+      _template: 'table',
+      _captcha: 'false',
+      'الاسم': name,
+      'رقم الجوال': phone,
+      'المدينة': city,
+      'نوع المشروع': type,
+      'التفاصيل': message,
+      'المصدر': 'نموذج الموقع الإلكتروني'
+    };
+
+    fetch(EMAIL_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(function (res) { return res.json().catch(function () { return {}; }).then(function (data) { return { ok: res.ok, data: data }; }); })
+      .then(function (result) {
+        if (result.ok) {
+          form.reset();
+          if (formNote) formNote.style.display = 'none';
+          if (formSuccess) formSuccess.style.display = 'block';
+          if (formSuccess) formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+          throw new Error('Send failed');
+        }
+      })
+      .catch(function () {
+        if (formErrorMsg) {
+          formErrorMsg.style.display = 'block';
+          formErrorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '';
+        submitBtn.innerHTML = originalBtnHTML;
+      });
+  });
+})();
 
 /* ============================================================
    12. MARBLE
